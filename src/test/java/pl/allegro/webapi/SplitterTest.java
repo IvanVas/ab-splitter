@@ -21,6 +21,7 @@ public class SplitterTest {
     public static final int WEIGHT_C = 5;
     public static final int WEIGHT_TOTAL = WEIGHT_A + WEIGHT_B + WEIGHT_C;
     public static final int STATISTICAL_TRIES = 10000;
+    public static final double ACCEPTIBLE_STATISTICAL_DELTA = 0.02;
 
     @Mock
     Configuration configuration;
@@ -44,7 +45,8 @@ public class SplitterTest {
      * @verifies return same group for the same user
      * @see Splitter#getGroupForUser(String)
      */
-    @Test public void getGroupForUser_shouldReturnSameGroupForTheSameUser() throws Exception {
+    @Test
+    public void getGroupForUser_shouldReturnSameGroupForTheSameUser() throws Exception {
         String user = "user123";
         assertEquals(splitter.getGroupForUser(user), splitter.getGroupForUser(user));
     }
@@ -53,7 +55,8 @@ public class SplitterTest {
      * @verifies return one of the configured groups
      * @see Splitter#getGroupForUser(String)
      */
-    @Test public void getGroupForUser_shouldReturnOneOfTheConfiguredGroups() throws Exception {
+    @Test
+    public void getGroupForUser_shouldReturnOneOfTheConfiguredGroups() throws Exception {
         String group = splitter.getGroupForUser("user123");
         assertTrue("Incorrect group returned", allGroups.contains(group));
     }
@@ -62,7 +65,8 @@ public class SplitterTest {
      * @verifies return statistically correct (in approx.) distribution of groups
      * @see Splitter#getGroupForUser(String)
      */
-    @Test public void getGroupForUser_shouldReturnStatisticallyCorrectInApproxDistributionOfGroups() throws Exception {
+    @Test
+    public void getGroupForUser_shouldReturnStatisticallyCorrectInApproxDistributionOfGroups() throws Exception {
         Map<String, List<String>> groupsToList = IntStream.range(0, STATISTICAL_TRIES).mapToObj((i) -> splitter.getGroupForUser(UUID.randomUUID().toString()))
                 .collect(groupingBy(String::toString));
         float distributionOfGroupA = (float) groupsToList.get("a").size() / STATISTICAL_TRIES;
@@ -74,6 +78,7 @@ public class SplitterTest {
     }
 
     private boolean distributionCorrespondsToWeight(float distributionOfGroupA, int groupWeight) {
-        return (float) groupWeight / WEIGHT_TOTAL - 0.01 <= distributionOfGroupA && distributionOfGroupA <= (float) groupWeight + 0.01;
+        return (float) groupWeight / WEIGHT_TOTAL - ACCEPTIBLE_STATISTICAL_DELTA <= distributionOfGroupA
+                && distributionOfGroupA <= (float) groupWeight + ACCEPTIBLE_STATISTICAL_DELTA;
     }
 }

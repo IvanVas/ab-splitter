@@ -1,5 +1,5 @@
 # A/B splitter microservice
-Used for determining user's group for A/B testing
+Used to determine user's group for A/B testing
 
 ## API
 

@@ -23,6 +23,7 @@ public class ConfigurationTest {
         assertEquals(100, configuration.getWeightsTotal());
         assertEquals(30, configuration.getGroupWeight("a"));
         assertEquals(50, configuration.getGroupWeight("c"));
+        assertEquals(8080, configuration.getPort());
     }
 
     /**
