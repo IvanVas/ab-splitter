@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pl.allegro.webapi</groupId>
-    <artifactId>ab-splitter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>ab-splitter-service</artifactId>
+    <version>0.0.1</version>
     
     <properties>
         <performancetest.port>8080</performancetest.port>
@@ -82,6 +82,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <outputFile>${project.build.directory}/ab-splitter-service.jar</outputFile>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                     <filters>
                         <filter>

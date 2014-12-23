@@ -1,10 +1,12 @@
 # A/B splitter microservice
 Used to determine user's group for A/B testing
 
+## Requirements
+Java 8 is required to run the service.
+
 ## API
 
-## Configuration
-
+## Usage and configuration
 
 
 ## Requirements

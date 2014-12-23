@@ -18,7 +18,6 @@ public class Configuration {
     public static final String CONF_GROUP_WEIGHTS = "groupWeights";
     public static final String CONF_PORT = "port";
 
-    //TODO unmodifiable?
     private final NavigableMap<String, Integer> groupWeights = new TreeMap<>();
     private int weightsTotal = 0;
     private final int port;

@@ -8,7 +8,7 @@ import static spark.Spark.*;
  * Main entrance for AB-Route REST API
  */
 public class ABRoute {
-    private static String USAGE_TIP = "Usage: java -jar blabla";
+    private static String USAGE_TIP = "Usage: java -jar ab-splitter-service.jar <config file path>";
     private static Configuration configuration;
     private static Splitter splitter;
 
@@ -20,9 +20,15 @@ public class ABRoute {
     private static void startService() {
         setPort(configuration.getPort());
         get(":version/route/:user", (request, response) -> {
-            String version = request.headers("version");
+            String apiVersion = request.params(":version");
+            if (!apiVersion.equals("v1")) {
+                response.status(404);
+                return new RouteResponse("Wrong API version", "101");
+            }
             String user = request.params(":user");
-            return new RouteResponse(splitter.getGroupForUser(user));
+            String version = request.headers("version");
+            //TODO: depending on request repeatability - consider adding a cache
+            return new RouteResponse(splitter.getGroupForUser(user)); // no overhead measured compared to using string concat or StringBuilder
         }, new JsonTransformer());
     }
 
