@@ -20,9 +20,9 @@ public class ConfigurationTest {
     public void Configuration_shouldParseSpecifiedValidConfigFile() throws Exception {
         File config = getFileFromResource("configuration_valid.json");
         Configuration configuration = new Configuration(config);
-        assertEquals(new Long(100L), configuration.getWeightsTotal());
-        assertEquals(new Long(30L), configuration.getGroupWeight("a"));
-        assertEquals(new Long(50L), configuration.getGroupWeight("c"));
+        assertEquals(100, configuration.getWeightsTotal());
+        assertEquals(30, configuration.getGroupWeight("a"));
+        assertEquals(50, configuration.getGroupWeight("c"));
     }
 
     /**
