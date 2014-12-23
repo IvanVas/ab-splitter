@@ -11,10 +11,14 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
+/**
+ * Services configuration 
+ */
 public class Configuration {
     public static final String CONF_GROUP_WEIGHTS = "groupWeights";
     public static final String CONF_PORT = "port";
 
+    //TODO unmodifiable?
     private final NavigableMap<String, Integer> groupWeights = new TreeMap<>();
     private int weightsTotal = 0;
     private final int port;
@@ -24,7 +28,7 @@ public class Configuration {
      * @should parse specified valid config file
      * @should throw on invalid config file
      */
-    public Configuration(File configFile) throws ConfigurationException {
+    public Configuration(File configFile) throws ConfigurationException {        
         try (BufferedReader br = new BufferedReader(new FileReader(configFile))) {
             JsonParser jsonParser = new JsonParser();
             JsonObject rootJsonObj = (JsonObject) jsonParser.parse(br);

@@ -21,7 +21,7 @@ public class SplitterTest {
     public static final int WEIGHT_C = 5;
     public static final int WEIGHT_TOTAL = WEIGHT_A + WEIGHT_B + WEIGHT_C;
     public static final int STATISTICAL_TRIES = 10000;
-    public static final double ACCEPTIBLE_STATISTICAL_DELTA = 0.02;
+    public static final double ACCEPTABLE_STATISTICAL_DELTA = 0.02;
 
     @Mock
     Configuration configuration;
@@ -78,7 +78,7 @@ public class SplitterTest {
     }
 
     private boolean distributionCorrespondsToWeight(float distributionOfGroupA, int groupWeight) {
-        return (float) groupWeight / WEIGHT_TOTAL - ACCEPTIBLE_STATISTICAL_DELTA <= distributionOfGroupA
-                && distributionOfGroupA <= (float) groupWeight + ACCEPTIBLE_STATISTICAL_DELTA;
+        return (float) groupWeight / WEIGHT_TOTAL - ACCEPTABLE_STATISTICAL_DELTA <= distributionOfGroupA
+                && distributionOfGroupA <= (float) groupWeight + ACCEPTABLE_STATISTICAL_DELTA;
     }
 }

@@ -7,6 +7,10 @@
     <groupId>pl.allegro.webapi</groupId>
     <artifactId>ab-splitter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    
+    <properties>
+        <performancetest.port>8080</performancetest.port>
+    </properties>
 
     <developers>
         <developer>
@@ -89,6 +93,18 @@
                             </excludes>
                         </filter>
                     </filters>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.lazerycode.jmeter</groupId>
+                <artifactId>jmeter-maven-plugin</artifactId>
+                <version>1.10.0</version>
+                <configuration>
+                    <propertiesUser>
+                        <webservice.port>${performancetest.port}</webservice.port>
+                    </propertiesUser>
+                    <overrideRootLogLevel>DEBUG</overrideRootLogLevel>
+                    <suppressJMeterOutput>false</suppressJMeterOutput>
                 </configuration>
             </plugin>
         </plugins>

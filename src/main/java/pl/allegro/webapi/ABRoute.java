@@ -10,17 +10,19 @@ import static spark.Spark.*;
 public class ABRoute {
     private static String USAGE_TIP = "Usage: java -jar blabla";
     private static Configuration configuration;
+    private static Splitter splitter;
 
     public static void main(String[] args) {
         init(args);
-        setupService();
+        startService();
     }
 
-    private static void setupService() {
+    private static void startService() {
         setPort(configuration.getPort());
         get(":version/route/:user", (request, response) -> {
             String version = request.headers("version");
-            return new RouteResponse("C");
+            String user = request.params(":user");
+            return new RouteResponse(splitter.getGroupForUser(user));
         }, new JsonTransformer());
     }
 
@@ -28,6 +30,7 @@ public class ABRoute {
         File configFile = getConfigFile(args);
         try {
             configuration = new Configuration(configFile);
+            splitter = new Splitter(configuration);
         } catch (Configuration.ConfigurationException e) {
             System.out.println(e.getMessage() + "\n" + USAGE_TIP);
             System.exit(1);
@@ -40,10 +43,11 @@ public class ABRoute {
             System.exit(1);
         }
         String configFilePath = args[0];
-        if (!(new File(configFilePath).exists())) {
+        File configFile = new File(configFilePath);
+        if (!(configFile.exists())) {
             System.out.println("Configuration file doesn't exist.\n" + USAGE_TIP);
             System.exit(1);
         }
-        return new File(configFilePath);
+        return configFile;
     }
 }

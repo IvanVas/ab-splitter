@@ -29,6 +29,7 @@ public class Splitter {
      * @should return statistically correct (in approx.) distribution of groups
      */
     public String getGroupForUser(String user) {
+        //TODO String::hashCode could be inappropriate hash function depending on the inputs... Consider FNV or similar
         int groupIntervalPoint = Math.abs(user.hashCode()) % weightsTotal;
         return getGroupFromInterval(groupIntervalPoint);
     }
