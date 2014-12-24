@@ -5,6 +5,33 @@ Used to determine user's group for A/B testing
 Java 8 is required to run the service.
 
 ## API
+### User's group route
+Get user's testing group:
+`GET /v1/route/:user`
+#### Parameters
+
+#### Response
+Status: 200 OK
+`{"group":"c"}`
+
+#### Error response
+Status: 400 or 500
+`{"group":"","errorMessage":"Wrong API version","errorCode":"400"}`
+
+#### HTTP Status Code Summary
+200 OK - Everything worked as expected.
+400 Bad Request - Wrong API version.
+500 - something went wrong on service's end.
+
+
+
+## Performance
+
+
+ Performance can be testing using maven: `mvn jmeter:jmeter`
+ Service should be started before the command.
+ There are several tests defined (in src/test/jmeter) for different number of simultaneous client threads
+ Results can be viewed in console or as files in target\jmeter\results\
 
 ## Usage and configuration
 

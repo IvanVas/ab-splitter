@@ -28,6 +28,7 @@ public class Splitter {
      * @should return one of the configured groups
      * @should return statistically correct (in approx.) distribution of groups
      */
+    //TODO depending on requests repeatability - consider adding a cache user: response
     public String getGroupForUser(String user) {
         //TODO String::hashCode could be inappropriate hash function depending on the inputs. Consider FNV or similar. Won't improve performance much as proved using a profiler.
         int groupPointOnSortedRange = Math.abs(user.hashCode()) % weightsTotal;

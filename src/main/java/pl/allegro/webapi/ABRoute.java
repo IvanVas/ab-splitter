@@ -27,19 +27,18 @@ public class ABRoute {
         //noinspection deprecation
         setPort(configuration.getPort());
         get(":version/route/:user", (request, response) -> {
-            String apiVersion = request.params(":version");
-            if (!isValidApiVersion(apiVersion)) {
-                response.status(404);
-                return new RouteResponse("Wrong API version", "404", "");
-            }
-            String user = request.params(":user");
-            String version = request.headers("version");
-            logger.debug(user);
-            //TODO depending on requests repeatability - consider adding a cache
             try {
+                String apiVersion = request.params(":version");
+                String user = request.params(":user");
+                String version = request.headers("version");                
+                if (!isValidApiVersion(apiVersion)) {
+                    response.status(400);
+                    return new RouteResponse("Wrong API version", "400", "");
+                }
                 return new RouteResponse(splitter.getGroupForUser(user)); // no overhead measured compared to using string concat or StringBuilder
             } catch (Exception e) {
                 logger.error("Problem serving the request.", e);
+                response.status(500);
                 return new RouteResponse(e.getMessage(), "500", "");
             }
         }, new JsonTransformer());
