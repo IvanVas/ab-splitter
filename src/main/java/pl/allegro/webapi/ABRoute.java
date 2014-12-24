@@ -1,5 +1,8 @@
 package pl.allegro.webapi;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 
 import static spark.Spark.*;
@@ -8,6 +11,8 @@ import static spark.Spark.*;
  * Main entrance for AB-Route REST API
  */
 public class ABRoute {
+    final static Logger logger = LoggerFactory.getLogger(ABRoute.class);
+    
     private static String USAGE_TIP = "Usage: java -jar ab-splitter-service.jar <config file path>";
     private static Configuration configuration;
     private static Splitter splitter;
@@ -16,20 +21,32 @@ public class ABRoute {
         init(args);
         startService();
     }
-
+    
+    //TODO add integration testing
     private static void startService() {
+        //noinspection deprecation
         setPort(configuration.getPort());
         get(":version/route/:user", (request, response) -> {
             String apiVersion = request.params(":version");
-            if (!apiVersion.equals("v1")) {
+            if (!isValidApiVersion(apiVersion)) {
                 response.status(404);
-                return new RouteResponse("Wrong API version", "101");
+                return new RouteResponse("Wrong API version", "404", "");
             }
             String user = request.params(":user");
             String version = request.headers("version");
-            //TODO: depending on request repeatability - consider adding a cache
-            return new RouteResponse(splitter.getGroupForUser(user)); // no overhead measured compared to using string concat or StringBuilder
+
+            //TODO depending on requests repeatability - consider adding a cache
+            try {
+                return new RouteResponse(splitter.getGroupForUser(user)); // no overhead measured compared to using string concat or StringBuilder
+            } catch (Exception e) {
+                logger.error("Problem serving the request.", e);
+                return new RouteResponse(e.getMessage(), "500", "");
+            }
         }, new JsonTransformer());
+    }
+
+    private static boolean isValidApiVersion(String apiVersion) {
+        return apiVersion.equals("v1");
     }
 
     private static void init(String[] args) {
