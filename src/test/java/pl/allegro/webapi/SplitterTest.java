@@ -20,8 +20,8 @@ public class SplitterTest {
     public static final int WEIGHT_B = 2;
     public static final int WEIGHT_C = 5;
     public static final int WEIGHT_TOTAL = WEIGHT_A + WEIGHT_B + WEIGHT_C;
-    public static final int STATISTICAL_TRIES = 10000;
-    public static final double ACCEPTABLE_STATISTICAL_DELTA = 0.02;
+    public static final int STATISTICAL_TRIES = 200000;
+    public static final double ACCEPTABLE_STATISTICAL_DELTA = 0.01;
 
     @Mock
     Configuration configuration;
@@ -47,8 +47,11 @@ public class SplitterTest {
      */
     @Test
     public void getGroupForUser_shouldReturnSameGroupForTheSameUser() throws Exception {
-        String user = "user123";
-        assertEquals(splitter.getGroupForUser(user), splitter.getGroupForUser(user));
+        IntStream.range(0, STATISTICAL_TRIES).parallel().forEach((i) -> {
+                    String user = "user" + i;
+                    assertEquals(splitter.getGroupForUser(user), splitter.getGroupForUser(user));
+                }
+        );
     }
 
     /**
@@ -67,7 +70,7 @@ public class SplitterTest {
      */
     @Test
     public void getGroupForUser_shouldReturnStatisticallyCorrectInApproxDistributionOfGroups() throws Exception {
-        Map<String, List<String>> groupsToList = IntStream.range(0, STATISTICAL_TRIES).mapToObj((i) -> splitter.getGroupForUser(UUID.randomUUID().toString()))
+        Map<String, List<String>> groupsToList = IntStream.range(0, STATISTICAL_TRIES).parallel().mapToObj((i) -> splitter.getGroupForUser(UUID.randomUUID().toString()))
                 .collect(groupingBy(String::toString));
         float distributionOfGroupA = (float) groupsToList.get("a").size() / STATISTICAL_TRIES;
         assertTrue(distributionCorrespondsToWeight(distributionOfGroupA, WEIGHT_A));

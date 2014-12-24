@@ -34,7 +34,7 @@ public class ABRoute {
             }
             String user = request.params(":user");
             String version = request.headers("version");
-
+            logger.debug(user);
             //TODO depending on requests repeatability - consider adding a cache
             try {
                 return new RouteResponse(splitter.getGroupForUser(user)); // no overhead measured compared to using string concat or StringBuilder
