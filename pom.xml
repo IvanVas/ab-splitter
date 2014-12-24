@@ -6,7 +6,7 @@
 
     <groupId>pl.allegro.webapi</groupId>
     <artifactId>ab-splitter-service</artifactId>
-    <version>0.0.2</version>
+    <version>0.1.0</version>
     
     <properties>
         <performancetest.port>8080</performancetest.port>
